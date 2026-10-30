@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=b1446fec38">
+  <link rel="stylesheet" href="/assets/style.css?v=0373fcaaf6">
 </head>
 <body id="top">
   <header class="site-header wrap">
@@ -284,45 +284,86 @@
       </div>
     </div>
 
-    <section class="wrap prose" aria-labelledby="decisions">
+    <section class="wrap prose lead-in" aria-labelledby="decisions">
       <span class="label">05 · Key decisions</span>
-      <h2 id="decisions">Seven decisions, and why</h2>
-      <ol class="decisions">
-        <li>
-          <h3>An agent, not a single search</h3>
-          <p class="why"><b>Why</b>Real questions span years and companies ("Is NVIDIA's growth sustainable, and is AMD's?"). One retrieval step can't plan that; an agent searches as many times as the question needs.</p>
-          <p class="tradeoff"><b>Trade-off</b>Slower and less predictable than one search, so I measured latency before committing.</p>
+      <h2 id="decisions">What I assumed, and what changed my mind</h2>
+      <p>I started with a confident plan: multimodal RAG on the Claude API, with the biggest model. Most of it changed, each time because of something I found rather than a hunch. Read each row left to right.</p>
+    </section>
+
+    <div class="wrap-wide">
+      <div class="shift-cols" aria-hidden="true"><span>I assumed</span><span></span><span>What I found</span><span></span><span>So I chose</span></div>
+      <ol class="shifts">
+        <li class="shift">
+          <p class="shift-topic">Answer format</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>A correct answer is enough.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>My readers are non-experts. They <strong>can't spot a mistake</strong>, and they often don't know what to ask next.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Cited facts kept apart from labelled interpretation, each source one click away, and three follow-up questions.</p>
         </li>
-        <li>
-          <h3>Claude Code and MCP on my subscription, instead of the API</h3>
-          <p class="why"><b>Why</b>No per-question bill while learning, and the same agent works in the app and in evals.</p>
-          <p class="tradeoff"><b>Trade-off</b>Personal use only. A version for other people would move to the API with its own keys.</p>
+        <li class="shift">
+          <p class="shift-topic">Answering</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>One search, then an answer: classic RAG.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>Real questions span companies and years ("Is NVIDIA's growth sustainable, and is AMD's?"). On one analysis question the agent made <strong>8 searches and page reads</strong>, and the answer checked out.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>An agent that plans its own searches, as many as the question needs.</p>
+          <p class="shift-note"><b>Trade-off</b>Slower and less predictable than one search, so I measured latency before committing.</p>
         </li>
-        <li>
-          <h3>Guardrails enforced by configuration, not the prompt</h3>
-          <p class="why"><b>Why</b>The first run showed the agent could see my other connected apps. Instructions alone shouldn't be the safety net, so the agent now has no built-in tools, only IndexIt's, and the session aborts if anything else appears.</p>
-          <p class="tradeoff"><b>Bonus</b>Hiding the extra tool definitions also cut the cost of a simple question about tenfold.</p>
+        <li class="shift">
+          <p class="shift-topic">Runtime</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>The Claude API, paying per question.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>I'm the only user. My subscription covers personal use, and one agent can serve both the app and the evals.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Claude Code and MCP on my subscription.</p>
+          <p class="shift-note"><b>Trade-off</b>Personal use only. A version for other people would move to the API with its own keys.</p>
         </li>
-        <li>
-          <h3>Choose the model with evals</h3>
-          <p class="why"><b>Why</b>I expected the larger model to win. On 27 fact-checked questions, Sonnet 5.5 gave 23 fully correct answers to Opus 5.5's 18, with 2 serious errors to Opus's 5, and was faster and cheaper. Giving Opus more effort made it worse: longer answers with more outside facts.</p>
-          <p class="tradeoff"><b>Trade-off</b>Opus covered slightly more of each answer key. For readers who can't spot mistakes, I chose accuracy over coverage.</p>
+        <li class="shift">
+          <p class="shift-topic">Guardrails</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>Set the agent's limits in the prompt.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>On the first run, the agent could see <strong>my other connected apps</strong>.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Limits set in configuration: no built-in tools, only IndexIt's, and the session stops if anything else appears.</p>
+          <p class="shift-note"><b>Bonus</b>Hiding the extra tool definitions also cut the cost of a simple question about tenfold.</p>
         </li>
-        <li>
-          <h3>Tables: improve what Claude reads, not what search finds</h3>
-          <p class="why"><b>Why</b>Adding every table as a searchable passage didn't improve search at all. The pages were already being found through their text. The win was attaching each result page's structured tables to what Claude reads, which also fixed a habit the evals exposed: the agent almost never opened full pages.</p>
+        <li class="shift">
+          <p class="shift-topic">Model</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>The bigger model gives more accurate answers.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>On 27 fact-checked questions, Sonnet was fully correct on <strong>23</strong> and Opus on <strong>18</strong>, with <strong>2 vs 5</strong> serious errors. More effort made Opus worse.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Sonnet 5.5: more accurate, faster and cheaper.</p>
+          <p class="shift-note"><b>Trade-off</b>Opus covered slightly more of each answer key. For readers who can't spot mistakes, I chose accuracy over coverage.</p>
         </li>
-        <li>
-          <h3>An answer format built for trust</h3>
-          <p class="why"><b>Why</b>Separating facts from interpretation, citing every fact, and making the source one click away turns "trust me" into "check me". Follow-up questions guide readers who don't know what to ask next.</p>
+        <li class="shift">
+          <p class="shift-topic">Tables</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>Make every table searchable.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>Search scores <strong>didn't move</strong>: pages were already found through their text. And the evals showed the agent almost never opened full pages, where the tables are.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Find pages by text, then attach their tables to what Claude reads, so numbers arrive tied to their column headers.</p>
         </li>
-        <li>
-          <h3>Don't build multimodal RAG</h3>
-          <p class="why"><b>Why</b>I started out planning to read charts as images, because annual reports "have charts". The evidence said otherwise: only 12 images across the first four filings, the one recurring chart prints its data as a table right below it, and tables are text Docling extracts with their headers. No eval error ever came from a missing image.</p>
-          <p class="tradeoff"><b>Trade-off</b>Charts aren't read as pictures. That's the right tool for chart-heavy documents like investor presentations, not for 10-Ks, so it would have added cost and complexity without better answers.</p>
+        <li class="shift">
+          <p class="shift-topic">Search</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>Smarter search: a reranker, keyword-plus-meaning search, a finance glossary.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>Each moved the search score little or not at all. Across <strong>46</strong> eval answers, only <strong>1 or 2</strong> problems came from search, and a glossary wouldn't scale to 100 companies.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Keep search simple, and spend the effort on how answers are worded.</p>
+        </li>
+        <li class="shift">
+          <p class="shift-topic">Images</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>Annual reports have charts, so read them as images: multimodal RAG.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span><strong>12 images</strong> in the first four filings, and the one recurring chart repeats its data as a table. No eval error came from a missing image.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>Text and tables only. No multimodal layer.</p>
+          <p class="shift-note"><b>Trade-off</b>Charts aren't read as pictures. That's the right tool for chart-heavy documents like investor presentations, not for 10-Ks.</p>
         </li>
       </ol>
-    </section>
+    </div>
 
     <section class="wrap prose" aria-labelledby="quality">
       <span class="label">06 · How I measured quality</span>
