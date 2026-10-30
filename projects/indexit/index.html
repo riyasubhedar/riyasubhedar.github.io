@@ -95,8 +95,154 @@
       </figure>
     </div>
 
+    <section class="wrap prose lead-in" aria-labelledby="design">
+      <span class="label">04 · System design</span>
+      <h2 id="design">How the pieces fit, and why each one</h2>
+      <p>Two paths share one local store. <strong>Indexing</strong> runs once per filing, on my laptop, for free. <strong>Answering</strong> runs on every question: Claude plans its own searches, but it can reach the filings only through IndexIt's tools. A third loop, <strong>quality</strong>, measures every change before it ships.</p>
+    </section>
+
+    <div class="wrap-wide">
+      <figure class="diagram">
+        <div class="diagram-scroll">
+          <svg viewBox="0 0 960 580" role="img" aria-labelledby="design-title design-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="design-title">IndexIt system design</title>
+            <desc id="design-desc">Indexing: a filing is added by upload or SEC fetch, its cover is checked, its text is cleaned into passages and embedded locally, and Docling extracts its tables. These are stored on the laptop as a library, a table cache and a LanceDB vector index. Answering: the user asks in the web app; a Claude agent inside guardrails searches through the IndexIt MCP server, which reads the stores and returns passages with their page tables; the cited answer streams back. Quality: golden questions are answered by the same agent, checked claim by claim by a fact-checker agent, and summarised in a scorecard that decides what ships.</desc>
+            <defs>
+              <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" class="d-head"/>
+              </marker>
+            </defs>
+
+            <!-- Lanes -->
+            <text class="d-lane" x="20" y="22">INDEXING · ONCE PER FILING · ON MY LAPTOP, FREE</text>
+            <line class="d-sep" x1="20" y1="178" x2="940" y2="178"/>
+            <text class="d-lane" x="20" y="198">STORED LOCALLY</text>
+            <line class="d-sep" x1="20" y1="296" x2="940" y2="296"/>
+            <text class="d-lane" x="20" y="316">ANSWERING · EVERY QUESTION</text>
+            <line class="d-sep" x1="20" y1="462" x2="940" y2="462"/>
+            <text class="d-lane" x="20" y="486">QUALITY · EVERY CHANGE IS MEASURED</text>
+
+            <!-- Indexing -->
+            <rect class="d-box" x="20" y="44" width="170" height="64" rx="4"/>
+            <text class="d-title" x="105" y="72" text-anchor="middle">Add a filing</text>
+            <text class="d-sub" x="105" y="91" text-anchor="middle">upload PDFs · SEC fetch</text>
+
+            <rect class="d-box" x="215" y="44" width="185" height="64" rx="4"/>
+            <text class="d-title" x="307" y="72" text-anchor="middle">Cover check</text>
+            <text class="d-sub" x="307" y="91" text-anchor="middle">company, year · you confirm</text>
+
+            <rect class="d-box" x="430" y="36" width="190" height="52" rx="4"/>
+            <text class="d-title" x="525" y="58" text-anchor="middle">Text passages</text>
+            <text class="d-sub" x="525" y="76" text-anchor="middle">PyMuPDF · cleaned · labelled</text>
+
+            <rect class="d-box" x="660" y="36" width="150" height="52" rx="4"/>
+            <text class="d-title" x="735" y="58" text-anchor="middle">Embeddings</text>
+            <text class="d-sub" x="735" y="76" text-anchor="middle">bge-small · local</text>
+
+            <rect class="d-box" x="430" y="104" width="190" height="52" rx="4"/>
+            <text class="d-title" x="525" y="126" text-anchor="middle">Docling tables</text>
+            <text class="d-sub" x="525" y="144" text-anchor="middle">column headers kept</text>
+
+            <path class="d-arrow" d="M190,76 H213" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M400,76 H412 V62 H428" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M412,76 V130 H428" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M620,62 H658" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M735,88 V210" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M525,156 V210" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M307,108 V210" marker-end="url(#arrowhead)"/>
+
+            <!-- Stored locally -->
+            <rect class="d-store" x="210" y="212" width="190" height="56" rx="4"/>
+            <text class="d-title" x="305" y="236" text-anchor="middle">Library</text>
+            <text class="d-sub" x="305" y="255" text-anchor="middle">PDFs · companies · aliases</text>
+
+            <rect class="d-store" x="430" y="212" width="190" height="56" rx="4"/>
+            <text class="d-title" x="525" y="236" text-anchor="middle">Table cache</text>
+            <text class="d-sub" x="525" y="255" text-anchor="middle">tables for every page</text>
+
+            <rect class="d-store" x="660" y="212" width="150" height="56" rx="4"/>
+            <text class="d-title" x="735" y="236" text-anchor="middle">Vector index</text>
+            <text class="d-sub" x="735" y="255" text-anchor="middle">LanceDB</text>
+
+            <!-- Answering -->
+            <rect class="d-box" x="20" y="350" width="140" height="70" rx="4"/>
+            <text class="d-title" x="90" y="377" text-anchor="middle">You</text>
+            <text class="d-sub" x="90" y="395" text-anchor="middle">web app</text>
+            <text class="d-sub" x="90" y="410" text-anchor="middle">answers stream in</text>
+
+            <rect class="d-guard" x="250" y="324" width="228" height="124" rx="10"/>
+            <text class="d-guard-label" x="262" y="340">guardrails: IndexIt tools only</text>
+            <rect class="d-agent" x="264" y="350" width="200" height="84" rx="4"/>
+            <text class="d-title" x="364" y="377" text-anchor="middle">Claude agent</text>
+            <text class="d-sub" x="364" y="396" text-anchor="middle">Sonnet 5.5 · Claude Code</text>
+            <text class="d-sub" x="364" y="413" text-anchor="middle">plans searches · writes</text>
+
+            <rect class="d-box" x="550" y="350" width="190" height="70" rx="4"/>
+            <text class="d-title" x="645" y="377" text-anchor="middle">IndexIt MCP server</text>
+            <text class="d-sub" x="645" y="395" text-anchor="middle">search_filings · read_page</text>
+            <text class="d-sub" x="645" y="410" text-anchor="middle">passages + page tables</text>
+
+            <path class="d-arrow" d="M160,374 H262" marker-end="url(#arrowhead)"/>
+            <text class="d-edge" x="211" y="367" text-anchor="middle">question</text>
+            <path class="d-arrow" d="M262,404 H162" marker-end="url(#arrowhead)"/>
+            <text class="d-edge" x="211" y="420" text-anchor="middle">cited answer</text>
+            <path class="d-arrow" d="M464,374 H548" marker-end="url(#arrowhead)"/>
+            <text class="d-edge" x="514" y="367" text-anchor="middle">search</text>
+            <path class="d-arrow" d="M548,404 H466" marker-end="url(#arrowhead)"/>
+            <text class="d-edge" x="514" y="420" text-anchor="middle">results</text>
+
+            <path class="d-arrow" d="M592,350 V270" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M705,350 V270" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M566,350 V312 H330 V270" marker-end="url(#arrowhead)"/>
+
+            <!-- Quality -->
+            <rect class="d-box" x="20" y="504" width="190" height="60" rx="4"/>
+            <text class="d-title" x="115" y="529" text-anchor="middle">Golden questions</text>
+            <text class="d-sub" x="115" y="548" text-anchor="middle">56 · dev and test sets</text>
+
+            <rect class="d-box" x="250" y="504" width="190" height="60" rx="4"/>
+            <text class="d-title" x="345" y="529" text-anchor="middle">Same agent answers</text>
+            <text class="d-sub" x="345" y="548" text-anchor="middle">like-for-like settings</text>
+
+            <rect class="d-box" x="480" y="504" width="200" height="60" rx="4"/>
+            <text class="d-title" x="580" y="529" text-anchor="middle">Fact-checker agent</text>
+            <text class="d-sub" x="580" y="548" text-anchor="middle">checks every claim</text>
+
+            <rect class="d-box" x="720" y="504" width="220" height="60" rx="4"/>
+            <text class="d-title" x="830" y="529" text-anchor="middle">Scorecard</text>
+            <text class="d-sub" x="830" y="548" text-anchor="middle">decides what ships</text>
+
+            <path class="d-arrow" d="M210,534 H248" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M440,534 H478" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M680,534 H718" marker-end="url(#arrowhead)"/>
+          </svg>
+        </div>
+        <figcaption><span class="scroll-hint">Scroll sideways to see the whole diagram. </span>Indexing writes to a local store; answering reads it only through IndexIt's tools; every change is scored before it ships.</figcaption>
+      </figure>
+
+      <div class="table-wrap">
+        <table class="design-table">
+          <thead><tr><th>Layer</th><th>Choice</th><th>Why</th><th>Instead of</th></tr></thead>
+          <tbody>
+            <tr><td>Interface</td><td>A local web app, one page</td><td>A personal tool needs no hosting. Answers stream as they're written, and one Claude session stays open between questions, so follow-ups are fast.</td><td>Streamlit</td></tr>
+            <tr><td>Model</td><td>Claude Sonnet 5.5</td><td>Won the model eval: 23 of 27 answers fully correct against Opus 5.5's 18, and faster and cheaper.</td><td>Opus 5.5</td></tr>
+            <tr><td>Runtime</td><td>Claude Code on my subscription</td><td>No per-question bill while learning, and the same agent runs in the app and in the evals.</td><td>The Claude API</td></tr>
+            <tr><td>Boundary</td><td>An MCP server with two tools</td><td>The agent can reach the filings only through these tools, which keeps retrieval separate from reasoning and works with any MCP client.</td><td>Giving the agent file access</td></tr>
+            <tr><td>Guardrails</td><td>Enforced by configuration</td><td>No built-in tools, IndexIt's tools only, and the session aborts if anything else appears. Prompts guide behaviour; configuration limits it.</td><td>Prompt instructions alone</td></tr>
+            <tr><td>Search</td><td>Company-aware, latest filing first</td><td>A question searches only the companies it names, so pages that merely mention a company can't crowd out its own filing. The expected page was found for 14 of 25 dev questions, up from 11 without it.</td><td>One search across everything</td></tr>
+            <tr><td>Tables</td><td>Small-to-big: find pages by text, attach their tables</td><td>Adding tables as search passages didn't change search at all. Attaching each result page's tables gives Claude numbers tied to their column headers.</td><td>Tables as search passages</td></tr>
+            <tr><td>Parsing</td><td>PyMuPDF for text, Docling for tables</td><td>In a parsing test, plain extraction garbled an income statement; Docling reproduced it exactly, headers included.</td><td>Text extraction only</td></tr>
+            <tr><td>Index</td><td>bge-small embeddings and LanceDB, both local</td><td>Free, private and light enough for an 8 GB laptop; LanceDB filters to the right filings before ranking, which company-aware search needs.</td><td>A hosted vector database</td></tr>
+            <tr><td>Library</td><td>Cover check, learned names, SEC fetch printed to PDF</td><td>New companies need no code changes: names and tickers are learned when a filing is added. Printing SEC pages to PDF keeps page citations working.</td><td>A hand-kept list of company names</td></tr>
+            <tr><td>Images</td><td>No multimodal layer</td><td>10-K numbers live in tables, and the one recurring chart prints its data as a table below it.</td><td>Reading charts as images</td></tr>
+            <tr><td>Quality</td><td>Golden questions, fact-checker, dev and test sets</td><td>Every change is judged on evidence, and a held-out test set stops me fooling myself.</td><td>Reading answers by eye</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <section class="wrap prose" aria-labelledby="decisions">
-      <span class="label">04 · Key decisions</span>
+      <span class="label">05 · Key decisions</span>
       <h2 id="decisions">Seven decisions, and why</h2>
       <ol class="decisions">
         <li>
@@ -136,7 +282,7 @@
     </section>
 
     <section class="wrap prose" aria-labelledby="quality">
-      <span class="label">05 · How I measured quality</span>
+      <span class="label">06 · How I measured quality</span>
       <h2 id="quality">An eval set I couldn't fool myself with</h2>
       <p>I built an eval set of 56 questions across 7 companies, phrased the way a curious reader would ask them, with answer keys checked against the filings. They're split into a <strong>dev</strong> set for tuning and a held-out <strong>test</strong> set, so improvements can't just be overfitting. A separate fact-checking agent verifies every claim in every answer against the filings, and each flag was reviewed and sorted by severity.</p>
 
@@ -167,7 +313,7 @@
     </section>
 
     <section class="wrap prose" aria-labelledby="didnt">
-      <span class="label">06 · What didn't work</span>
+      <span class="label">07 · What didn't work</span>
       <h2 id="didnt">Ideas the numbers talked me out of</h2>
       <ul>
         <li><strong>Smarter search tricks</strong> (a reranker, keyword-plus-meaning search, tables as search passages) looked promising and moved the search score little or not at all. I kept search simple.</li>
@@ -177,7 +323,7 @@
     </section>
 
     <section class="wrap prose" aria-labelledby="learned">
-      <span class="label">07 · What I learned</span>
+      <span class="label">08 · What I learned</span>
       <h2 id="learned">Lessons I'll carry into every AI product</h2>
       <ul>
         <li><strong>Evals change decisions.</strong> Without them I'd have shipped the bigger, slower, less accurate model.</li>
@@ -189,7 +335,7 @@
     </section>
 
     <section class="wrap prose" aria-labelledby="next">
-      <span class="label">08 · If I took it further</span>
+      <span class="label">09 · If I took it further</span>
       <h2 id="next">Where it could go next</h2>
       <p>IndexIt does what I set out to build, so I've stopped here. If I picked it up again, I'd start with these:</p>
       <ul>

@@ -175,6 +175,32 @@ td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
 tr.best td { font-weight: 600; }
 .note { font-size: 0.95rem; color: var(--muted); }
 
+/* System design diagram: inline SVG drawn with the site's tokens, so it follows light/dark mode.
+   On narrow screens it scrolls sideways instead of shrinking the text. */
+.diagram { margin: 0 0 0.75rem; }
+.lead-in { padding-bottom: 1rem; }
+.scroll-hint { display: none; font-style: normal; }
+@media (max-width: 800px) { .scroll-hint { display: inline; } } /* a section that introduces the wide figure right after it */
+.diagram-scroll { overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.d-lane { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; fill: var(--muted); }
+.d-sep { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
+.d-box { fill: var(--paper); stroke: var(--muted); stroke-width: 1; }
+.d-store { fill: var(--paper-2); stroke: var(--muted); stroke-width: 1; }
+.d-agent { fill: var(--paper); stroke: var(--accent); stroke-width: 1.6; }
+.d-guard { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 5 4; }
+.d-title { font-family: var(--serif); font-size: 14.5px; font-weight: 600; fill: var(--ink); }
+.d-sub { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
+.d-guard-label { font-family: var(--mono); font-size: 10px; fill: var(--accent); }
+.d-edge { font-family: var(--mono); font-size: 9.5px; fill: var(--muted); }
+.d-arrow { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+.d-head { fill: var(--muted); }
+
+.design-table { min-width: 720px; }
+.design-table td:first-child { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.design-table td:nth-child(2) { font-weight: 600; min-width: 11rem; }
+.design-table td:last-child { color: var(--muted); font-style: italic; min-width: 9rem; }
+
 /* Footer */
 .footer {
   display: flex;
