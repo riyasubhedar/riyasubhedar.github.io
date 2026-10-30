@@ -97,7 +97,7 @@
 
     <section class="wrap prose" aria-labelledby="decisions">
       <span class="label">04 · Key decisions</span>
-      <h2 id="decisions">Six decisions, and why</h2>
+      <h2 id="decisions">Seven decisions, and why</h2>
       <ol class="decisions">
         <li>
           <h3>An agent, not a single search</h3>
@@ -126,6 +126,11 @@
         <li>
           <h3>An answer format built for trust</h3>
           <p class="why"><b>Why</b>Separating facts from interpretation, citing every fact, and making the source one click away turns "trust me" into "check me". Follow-up questions guide readers who don't know what to ask next.</p>
+        </li>
+        <li>
+          <h3>Don't build multimodal RAG</h3>
+          <p class="why"><b>Why</b>I started out planning to read charts as images, because annual reports "have charts". The evidence said otherwise: only 12 images across the first four filings, the one recurring chart prints its data as a table right below it, and tables are text Docling extracts with their headers. No eval error ever came from a missing image.</p>
+          <p class="tradeoff"><b>Trade-off</b>Charts aren't read as pictures. That's the right tool for chart-heavy documents like investor presentations, not for 10-Ks, so it would have added cost and complexity without better answers.</p>
         </li>
       </ol>
     </section>
@@ -179,15 +184,17 @@
         <li><strong>Know your user's failure mode.</strong> For non-experts, the dangerous error is the confident summary, not the missing detail.</li>
         <li><strong>Put guardrails in configuration.</strong> Prompts guide behaviour; configuration limits it.</li>
         <li><strong>Showing sources is a product decision.</strong> One click to the source page does more for trust than any wording.</li>
+        <li><strong>Pick the technique from the evidence, not the hype.</strong> I began with "multimodal RAG"; the documents and evals showed text and tables were what this user needed.</li>
       </ul>
     </section>
 
     <section class="wrap prose" aria-labelledby="next">
-      <span class="label">08 · What's next</span>
-      <h2 id="next">Closing the last gaps</h2>
+      <span class="label">08 · If I took it further</span>
+      <h2 id="next">Where it could go next</h2>
+      <p>IndexIt does what I set out to build, so I've stopped here. If I picked it up again, I'd start with these:</p>
       <ul>
-        <li><strong>A verification pass:</strong> check each draft answer against its sources before showing it, to catch the remaining overstatements.</li>
-        <li><strong>Multimodal RAG:</strong> reading charts in investor presentations, where the numbers exist only as images.</li>
+        <li><strong>A verification pass:</strong> a separate check of each draft against its sources before it's shown, aimed at the remaining overstated summaries, if evals showed the gain was worth the extra 10 seconds.</li>
+        <li><strong>A key-figures table for big comparisons:</strong> questions like "who spends the most on R&amp;D?" search every company one by one today. A table of headline figures, built from the filings' own statements, would keep them fast as the library grows.</li>
       </ul>
       <p class="project-links" style="margin-top:2rem">
         <a href="https://github.com/riyasubhedar/indexit">Code on GitHub ↗</a>
