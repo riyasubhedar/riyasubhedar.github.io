@@ -175,31 +175,41 @@ td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
 tr.best td { font-weight: 600; }
 .note { font-size: 0.95rem; color: var(--muted); }
 
-/* System design diagram: inline SVG drawn with the site's tokens, so it follows light/dark mode.
-   On narrow screens it scrolls sideways instead of shrinking the text. */
+/* System design diagram (layout only). The drawing styles (.d-*) live inside each SVG, so a diagram
+   always arrives with the styles it needs. On narrow screens it scrolls sideways instead of shrinking. */
 .diagram { margin: 0 0 0.75rem; }
 .lead-in { padding-bottom: 1rem; }
 .scroll-hint { display: none; font-style: normal; }
 @media (max-width: 800px) { .scroll-hint { display: inline; } } /* a section that introduces the wide figure right after it */
 .diagram-scroll { overflow-x: auto; }
 .diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
-.d-lane { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; fill: var(--muted); }
-.d-sep { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
-.d-box { fill: var(--paper); stroke: var(--muted); stroke-width: 1; }
-.d-store { fill: var(--paper-2); stroke: var(--muted); stroke-width: 1; }
-.d-agent { fill: var(--paper); stroke: var(--accent); stroke-width: 1.6; }
-.d-guard { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 5 4; }
-.d-title { font-family: var(--serif); font-size: 14.5px; font-weight: 600; fill: var(--ink); }
-.d-sub { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
-.d-guard-label { font-family: var(--mono); font-size: 10px; fill: var(--accent); }
-.d-edge { font-family: var(--mono); font-size: 9.5px; fill: var(--muted); }
-.d-arrow { fill: none; stroke: var(--muted); stroke-width: 1.2; }
-.d-head { fill: var(--muted); }
 
 .design-table { min-width: 720px; }
 .design-table td:first-child { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
 .design-table td:nth-child(2) { font-weight: 600; min-width: 11rem; }
 .design-table td:last-child { color: var(--muted); font-style: italic; min-width: 9rem; }
+
+/* Contents list. Narrow screens: inline under the case-study header. Wide screens: fixed in the left
+   margin (only from 1400px, where the margin is wider than the list, so it never covers a figure). */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+.prose h2[id] { scroll-margin-top: 4.5rem; } /* keeps the section's small label in view */
+.toc { font-family: var(--mono); font-size: 0.78rem; line-height: 1.5; }
+.toc .label { margin-bottom: 0.75rem; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0 0 0.4rem; break-inside: avoid; }
+.toc a { display: grid; grid-template-columns: 2.4em 1fr; padding: 0.1rem 0; text-decoration: none; color: var(--muted); }
+.toc a:hover, .toc a.active { color: var(--accent); }
+.toc-num { opacity: 0.7; }
+.toc-inline { margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.toc-inline ol { columns: 2; column-gap: 2rem; }
+.toc-side { display: none; }
+.toc a.toc-top { display: block; margin-top: 1.25rem; font-size: 0.75rem; } /* not the two-column list layout */
+@media (min-width: 1400px) {
+  .toc-side { display: block; position: fixed; top: 7rem; left: 1.75rem; width: 11.5rem; }
+  .toc-inline { display: none; }
+}
+@media (max-width: 640px) { .toc-inline ol { columns: 1; } }
 
 /* Footer */
 .footer {

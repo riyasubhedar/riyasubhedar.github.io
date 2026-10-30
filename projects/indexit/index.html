@@ -15,9 +15,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=b1446fec38">
 </head>
-<body>
+<body id="top">
   <header class="site-header wrap">
     <a class="site-name" href="/">Riya Subhedar</a>
     <nav class="site-nav" aria-label="Main">
@@ -29,6 +29,21 @@
   </header>
 
   <main>
+    <nav class="toc toc-side" aria-label="On this page">
+      <span class="label">On this page</span>
+      <ol>
+            <li><a href="#problem"><span class="toc-num">01</span>Problem</a></li>
+            <li><a href="#good"><span class="toc-num">02</span>What good looks like</a></li>
+            <li><a href="#built"><span class="toc-num">03</span>What I built</a></li>
+            <li><a href="#design"><span class="toc-num">04</span>System design</a></li>
+            <li><a href="#decisions"><span class="toc-num">05</span>Key decisions</a></li>
+            <li><a href="#quality"><span class="toc-num">06</span>How I measured quality</a></li>
+            <li><a href="#didnt"><span class="toc-num">07</span>What didn&#39;t work</a></li>
+            <li><a href="#learned"><span class="toc-num">08</span>What I learned</a></li>
+            <li><a href="#next"><span class="toc-num">09</span>If I took it further</a></li>
+      </ol>
+      <a class="toc-top" href="#top">↑ Back to top</a>
+    </nav>
     <div class="wrap case-head">
       <a class="back" href="/#work">← All work</a>
       <span class="label" style="margin-top:2.5rem">Case study · 2026</span>
@@ -42,6 +57,20 @@
         <div><dt>Built with</dt><dd>Claude (Sonnet 5.5) via Claude Code and the Agent SDK, MCP, LanceDB, Docling, Python</dd></div>
         <div><dt>Links</dt><dd><a href="https://github.com/riyasubhedar/indexit" data-goatcounter-click="out-indexit-code">Code</a> · <a href="https://github.com/riyasubhedar/indexit/blob/main/PROJECT.md" data-goatcounter-click="out-indexit-decision-log">Decision log</a> · <a href="https://github.com/riyasubhedar/indexit/blob/main/eval/model_comparison.md" data-goatcounter-click="out-indexit-eval-writeup">Eval write-up</a></dd></div>
       </dl>
+      <nav class="toc toc-inline" aria-label="Contents">
+        <span class="label">Contents</span>
+        <ol>
+          <li><a href="#problem"><span class="toc-num">01</span>Problem</a></li>
+          <li><a href="#good"><span class="toc-num">02</span>What good looks like</a></li>
+          <li><a href="#built"><span class="toc-num">03</span>What I built</a></li>
+          <li><a href="#design"><span class="toc-num">04</span>System design</a></li>
+          <li><a href="#decisions"><span class="toc-num">05</span>Key decisions</a></li>
+          <li><a href="#quality"><span class="toc-num">06</span>How I measured quality</a></li>
+          <li><a href="#didnt"><span class="toc-num">07</span>What didn&#39;t work</a></li>
+          <li><a href="#learned"><span class="toc-num">08</span>What I learned</a></li>
+          <li><a href="#next"><span class="toc-num">09</span>If I took it further</a></li>
+        </ol>
+      </nav>
     </div>
 
     <div class="wrap-wide">
@@ -107,6 +136,20 @@
           <svg viewBox="0 0 960 580" role="img" aria-labelledby="design-title design-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="design-title">IndexIt system design</title>
             <desc id="design-desc">Indexing: a filing is added by upload or SEC fetch, its cover is checked, its text is cleaned into passages and embedded locally, and Docling extracts its tables. These are stored on the laptop as a library, a table cache and a LanceDB vector index. Answering: the user asks in the web app; a Claude agent inside guardrails searches through the IndexIt MCP server, which reads the stores and returns passages with their page tables; the cited answer streams back. Quality: golden questions are answered by the same agent, checked claim by claim by a fact-checker agent, and summarised in a scorecard that decides what ships.</desc>
+            <style>
+              .d-lane { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; fill: var(--muted); }
+              .d-sep { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
+              .d-box { fill: var(--paper); stroke: var(--muted); stroke-width: 1; }
+              .d-store { fill: var(--paper-2); stroke: var(--muted); stroke-width: 1; }
+              .d-agent { fill: var(--paper); stroke: var(--accent); stroke-width: 1.6; }
+              .d-guard { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 5 4; }
+              .d-title { font-family: var(--serif); font-size: 14.5px; font-weight: 600; fill: var(--ink); }
+              .d-sub { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
+              .d-guard-label { font-family: var(--mono); font-size: 10px; fill: var(--accent); }
+              .d-edge { font-family: var(--mono); font-size: 9.5px; fill: var(--muted); }
+              .d-arrow { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+              .d-head { fill: var(--muted); }
+            </style>
             <defs>
               <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M0,0 L10,5 L0,10 z" class="d-head"/>
@@ -354,6 +397,18 @@
     <span>© 2026 Riya Subhedar</span>
     <span>Built with Claude Code · Visits counted anonymously, no cookies</span>
   </footer>
+  <script>
+    // Contents list: highlight the section being read. Optional; the links work without it.
+    (() => {
+      const links = [...document.querySelectorAll('.toc a[href^="#"]:not(.toc-top)')];
+      const ids = [...new Set(links.map((a) => a.hash.slice(1)))];
+      const mark = (id) => links.forEach((a) => a.classList.toggle("active", a.hash === "#" + id));
+      const observer = new IntersectionObserver((entries) => {
+        entries.filter((e) => e.isIntersecting).forEach((e) => mark(e.target.id));
+      }, { rootMargin: "0px 0px -75% 0px" });
+      ids.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
+    })();
+  </script>
   <!-- Analytics: GoatCounter, cookie-free, no personal data (see README). -->
   <script data-goatcounter="https://riyasubhedar.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>

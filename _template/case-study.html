@@ -23,9 +23,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=b1446fec38">
 </head>
-<body>
+<body id="top">
   <header class="site-header wrap">
     <a class="site-name" href="/">Riya Subhedar</a>
     <nav class="site-nav" aria-label="Main">
@@ -37,6 +37,20 @@
   </header>
 
   <main>
+    <nav class="toc toc-side" aria-label="On this page">
+      <span class="label">On this page</span>
+      <ol>
+            <li><a href="#problem"><span class="toc-num">01</span>Problem</a></li>
+            <li><a href="#good"><span class="toc-num">02</span>What good looks like</a></li>
+            <li><a href="#built"><span class="toc-num">03</span>What I built</a></li>
+            <li><a href="#decisions"><span class="toc-num">04</span>Key decisions</a></li>
+            <li><a href="#quality"><span class="toc-num">05</span>How I measured quality</a></li>
+            <li><a href="#didnt"><span class="toc-num">06</span>What didn&#39;t work</a></li>
+            <li><a href="#learned"><span class="toc-num">07</span>What I learned</a></li>
+            <li><a href="#next"><span class="toc-num">08</span>What&#39;s next</a></li>
+      </ol>
+      <a class="toc-top" href="#top">↑ Back to top</a>
+    </nav>
     <div class="wrap case-head">
       <a class="back" href="/#work">← All work</a>
       <span class="label" style="margin-top:2.5rem">Case study · {{year}}</span>
@@ -49,6 +63,20 @@
         <div><dt>Built with</dt><dd>{{Models, frameworks, tools}}</dd></div>
         <div><dt>Links</dt><dd><a href="{{repo}}">Code</a> · <a href="{{decision log}}">Decision log</a></dd></div>
       </dl>
+      <!-- Contents: keep this list and the "On this page" one in sync with the sections (and the optional System design section). -->
+      <nav class="toc toc-inline" aria-label="Contents">
+        <span class="label">Contents</span>
+        <ol>
+          <li><a href="#problem"><span class="toc-num">01</span>Problem</a></li>
+          <li><a href="#good"><span class="toc-num">02</span>What good looks like</a></li>
+          <li><a href="#built"><span class="toc-num">03</span>What I built</a></li>
+          <li><a href="#decisions"><span class="toc-num">04</span>Key decisions</a></li>
+          <li><a href="#quality"><span class="toc-num">05</span>How I measured quality</a></li>
+          <li><a href="#didnt"><span class="toc-num">06</span>What didn&#39;t work</a></li>
+          <li><a href="#learned"><span class="toc-num">07</span>What I learned</a></li>
+          <li><a href="#next"><span class="toc-num">08</span>What&#39;s next</a></li>
+        </ol>
+      </nav>
     </div>
 
     <div class="wrap-wide">
@@ -66,26 +94,38 @@
       </ul>
     </section>
 
-    <section class="wrap prose"><span class="label">01 · Problem</span><h2>{{Headline}}</h2><p>{{The problem and the user. Who struggles, and why existing tools fall short.}}</p></section>
-    <section class="wrap prose"><span class="label">02 · What good looks like</span><h2>{{Headline}}</h2><ul><li>{{Quality bar / principle}}</li></ul><p><strong>Constraints:</strong> {{time, money, hardware, users}}</p></section>
-    <section class="wrap prose"><span class="label">03 · What I built</span><h2>{{Headline}}</h2><p>{{How it works, in plain words. Add screenshots below.}}</p></section>
+    <section class="wrap prose"><span class="label">01 · Problem</span><h2 id="problem">{{Headline}}</h2><p>{{The problem and the user. Who struggles, and why existing tools fall short.}}</p></section>
+    <section class="wrap prose"><span class="label">02 · What good looks like</span><h2 id="good">{{Headline}}</h2><ul><li>{{Quality bar / principle}}</li></ul><p><strong>Constraints:</strong> {{time, money, hardware, users}}</p></section>
+    <section class="wrap prose"><span class="label">03 · What I built</span><h2 id="built">{{Headline}}</h2><p>{{How it works, in plain words. Add screenshots below.}}</p></section>
     <!-- Optional: 04 · System design. Copy IndexIt's section (lead-in text, inline SVG diagram in .diagram,
          and the "Layer · Choice · Why · Instead of" table in .design-table), then renumber the sections below. -->
-    <section class="wrap prose"><span class="label">04 · Key decisions</span><h2>{{N}} decisions, and why</h2>
+    <section class="wrap prose"><span class="label">04 · Key decisions</span><h2 id="decisions">{{N}} decisions, and why</h2>
       <ol class="decisions">
         <li><h3>{{Decision}}</h3><p class="why"><b>Why</b>{{Reason, with evidence}}</p><p class="tradeoff"><b>Trade-off</b>{{What it cost or what was given up}}</p></li>
       </ol>
     </section>
-    <section class="wrap prose"><span class="label">05 · How I measured quality</span><h2>{{Headline}}</h2><p>{{Eval set, method, results table.}}</p></section>
-    <section class="wrap prose"><span class="label">06 · What didn't work</span><h2>{{Headline}}</h2><ul><li>{{Honest misses}}</li></ul></section>
-    <section class="wrap prose"><span class="label">07 · What I learned</span><h2>{{Headline}}</h2><ul><li>{{Lesson}}</li></ul></section>
-    <section class="wrap prose"><span class="label">08 · What's next</span><h2>{{Headline}}</h2><ul><li>{{Next step}}</li></ul></section>
+    <section class="wrap prose"><span class="label">05 · How I measured quality</span><h2 id="quality">{{Headline}}</h2><p>{{Eval set, method, results table.}}</p></section>
+    <section class="wrap prose"><span class="label">06 · What didn't work</span><h2 id="didnt">{{Headline}}</h2><ul><li>{{Honest misses}}</li></ul></section>
+    <section class="wrap prose"><span class="label">07 · What I learned</span><h2 id="learned">{{Headline}}</h2><ul><li>{{Lesson}}</li></ul></section>
+    <section class="wrap prose"><span class="label">08 · What's next</span><h2 id="next">{{Headline}}</h2><ul><li>{{Next step}}</li></ul></section>
   </main>
 
   <footer class="footer wrap">
     <span>© {{year}} Riya Subhedar</span>
     <span>Built with Claude Code · Visits counted anonymously, no cookies</span>
   </footer>
+  <script>
+    // Contents list: highlight the section being read. Optional; the links work without it.
+    (() => {
+      const links = [...document.querySelectorAll('.toc a[href^="#"]:not(.toc-top)')];
+      const ids = [...new Set(links.map((a) => a.hash.slice(1)))];
+      const mark = (id) => links.forEach((a) => a.classList.toggle("active", a.hash === "#" + id));
+      const observer = new IntersectionObserver((entries) => {
+        entries.filter((e) => e.isIntersecting).forEach((e) => mark(e.target.id));
+      }, { rootMargin: "0px 0px -75% 0px" });
+      ids.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
+    })();
+  </script>
   <!-- Analytics: GoatCounter, cookie-free, no personal data (see README). -->
   <script data-goatcounter="https://riyasubhedar.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
