@@ -1,0 +1,88 @@
+<!doctype html>
+<!--
+  Case-study template (not published: Jekyll skips folders starting with "_").
+  To add a project:
+    1. Copy this file to projects/<project-slug>/index.html and replace every {{…}}.
+    2. Put screenshots in assets/img/<slug>-*.jpg (about 1800 px wide, JPEG quality ~82).
+    3. Add a card to "Selected work" in index.html (copy the IndexIt <article>, bump the number).
+  Keep the section order: readers learn to scan it the same way for every project.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{Project}} · Case study · Riya Subhedar</title>
+  <meta name="description" content="{{One sentence: what it is and why it matters.}}">
+  <meta property="og:title" content="{{Project}}: {{tagline}}">
+  <meta property="og:description" content="{{One sentence with the headline result.}}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://riyasubhedar.github.io/projects/{{slug}}/">
+  <meta property="og:image" content="https://riyasubhedar.github.io/assets/img/{{slug}}-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="site-name" href="/">Riya Subhedar</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#work">Work</a>
+      <a href="/#about">About</a>
+      <a href="https://github.com/riyasubhedar">GitHub</a>
+      <a href="https://www.linkedin.com/in/riyasubhedar/">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wrap case-head">
+      <a class="back" href="/#work">← All work</a>
+      <span class="label" style="margin-top:2.5rem">Case study · {{year}}</span>
+      <h1>{{Project}}</h1>
+      <p class="subtitle">{{Tagline.}}</p>
+      <p class="summary">{{Two sentences: what it does, for whom, and what makes it trustworthy or different.}}</p>
+      <dl class="meta">
+        <div><dt>Role</dt><dd>{{e.g. Product and build, solo, with Claude Code as engineering partner}}</dd></div>
+        <div><dt>When</dt><dd>{{Month year}}</dd></div>
+        <div><dt>Built with</dt><dd>{{Models, frameworks, tools}}</dd></div>
+        <div><dt>Links</dt><dd><a href="{{repo}}">Code</a> · <a href="{{decision log}}">Decision log</a></dd></div>
+      </dl>
+    </div>
+
+    <div class="wrap-wide">
+      <figure>
+        <img src="/assets/img/{{slug}}-hero.jpg" alt="{{What the screenshot shows, in a sentence.}}" width="1800" height="1175">
+        <figcaption>{{What to notice in this screen.}}</figcaption>
+      </figure>
+    </div>
+
+    <section class="wrap" aria-label="Results at a glance">
+      <ul class="stats">
+        <li class="stat"><span class="num">{{number}}</span><span class="what">{{what it measures}}</span></li>
+        <li class="stat"><span class="num">{{number}}</span><span class="what">{{what it measures}}</span></li>
+        <li class="stat"><span class="num">{{number}}</span><span class="what">{{what it measures}}</span></li>
+      </ul>
+    </section>
+
+    <section class="wrap prose"><span class="label">01 · Problem</span><h2>{{Headline}}</h2><p>{{The problem and the user. Who struggles, and why existing tools fall short.}}</p></section>
+    <section class="wrap prose"><span class="label">02 · What good looks like</span><h2>{{Headline}}</h2><ul><li>{{Quality bar / principle}}</li></ul><p><strong>Constraints:</strong> {{time, money, hardware, users}}</p></section>
+    <section class="wrap prose"><span class="label">03 · What I built</span><h2>{{Headline}}</h2><p>{{How it works, in plain words. Add screenshots below.}}</p></section>
+    <section class="wrap prose"><span class="label">04 · Key decisions</span><h2>{{N}} decisions, and why</h2>
+      <ol class="decisions">
+        <li><h3>{{Decision}}</h3><p class="why"><b>Why</b>{{Reason, with evidence}}</p><p class="tradeoff"><b>Trade-off</b>{{What it cost or what was given up}}</p></li>
+      </ol>
+    </section>
+    <section class="wrap prose"><span class="label">05 · How I measured quality</span><h2>{{Headline}}</h2><p>{{Eval set, method, results table.}}</p></section>
+    <section class="wrap prose"><span class="label">06 · What didn't work</span><h2>{{Headline}}</h2><ul><li>{{Honest misses}}</li></ul></section>
+    <section class="wrap prose"><span class="label">07 · What I learned</span><h2>{{Headline}}</h2><ul><li>{{Lesson}}</li></ul></section>
+    <section class="wrap prose"><span class="label">08 · What's next</span><h2>{{Headline}}</h2><ul><li>{{Next step}}</li></ul></section>
+  </main>
+
+  <footer class="footer wrap">
+    <span>© {{year}} Riya Subhedar</span>
+    <span>Built with Claude Code</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# GitHub Pages settings. The site is plain HTML; these files stay out of the published site.
+exclude:
+  - README.md
+  - scripts
+  - _template

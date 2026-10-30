@@ -1,0 +1,6 @@
+# Never committed (scripts/check_private.py blocks these too)
+.private-terms
+.env
+.env.*
+*.pdf
+.DS_Store

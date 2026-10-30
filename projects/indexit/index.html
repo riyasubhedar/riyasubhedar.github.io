@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IndexIt · Case study · Riya Subhedar</title>
+  <meta name="description" content="IndexIt answers plain-English questions about company annual reports, with every fact cited. How I built it, the decisions behind it, and how I measured quality.">
+  <meta property="og:title" content="IndexIt: the fine print, made simple">
+  <meta property="og:description" content="Agentic RAG over company 10-Ks. Picked the model with evals, locked the agent down by configuration, and got to zero wrong facts on held-out questions.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://riyasubhedar.github.io/projects/indexit/">
+  <meta property="og:image" content="https://riyasubhedar.github.io/assets/img/indexit-answer.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="site-name" href="/">Riya Subhedar</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#work">Work</a>
+      <a href="/#about">About</a>
+      <a href="https://github.com/riyasubhedar">GitHub</a>
+      <a href="https://www.linkedin.com/in/riyasubhedar/">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wrap case-head">
+      <a class="back" href="/#work">← All work</a>
+      <span class="label" style="margin-top:2.5rem">Case study · 2026</span>
+      <h1>IndexIt</h1>
+      <p class="subtitle">The fine print, made simple.</p>
+      <p class="summary">A local app that answers plain-English questions about company annual reports. Every fact cites the page it came from, interpretation is labelled as interpretation, and quality is measured, not assumed.</p>
+
+      <dl class="meta">
+        <div><dt>Role</dt><dd>Product and build, solo, with Claude Code as engineering partner</dd></div>
+        <div><dt>When</dt><dd>October 2026</dd></div>
+        <div><dt>Built with</dt><dd>Claude (Sonnet 5.5) via Claude Code and the Agent SDK, MCP, LanceDB, Docling, Python</dd></div>
+        <div><dt>Links</dt><dd><a href="https://github.com/riyasubhedar/indexit">Code</a> · <a href="https://github.com/riyasubhedar/indexit/blob/main/PROJECT.md">Decision log</a> · <a href="https://github.com/riyasubhedar/indexit/blob/main/eval/model_comparison.md">Eval write-up</a></dd></div>
+      </dl>
+    </div>
+
+    <div class="wrap-wide">
+      <figure>
+        <img src="/assets/img/indexit-answer.jpg" alt="IndexIt answering why Amazon's retail business earns thinner margins than AWS, with page citations after every fact, a research trail, and the library of filings in the left column." width="1800" height="1175">
+        <figcaption>An answer in two parts: what the filing says, every fact cited, then a clearly labelled reading. The left column holds past conversations and the library of filings.</figcaption>
+      </figure>
+    </div>
+
+    <section class="wrap" aria-label="Results at a glance">
+      <ul class="stats">
+        <li class="stat"><span class="num">0</span><span class="what">wrong facts in 19 held-out test answers</span></li>
+        <li class="stat"><span class="num">23 vs 18</span><span class="what">fully correct answers of 27: the smaller model beat the bigger one</span></li>
+        <li class="stat"><span class="num">~16 s</span><span class="what">median time to a cited answer, streamed as it's written</span></li>
+      </ul>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="problem">
+      <span class="label">01 · Problem</span>
+      <h2 id="problem">Annual reports hold the answers, but not for most readers</h2>
+      <p>A company's 10-K runs to 100 pages or more of dense legal and financial language. People who are curious about a company, but aren't finance professionals, don't know where to look or which numbers matter. General chatbots answer confidently from memory, without sources, and the reader has no way to tell when they're wrong.</p>
+      <p><strong>The user:</strong> someone like me, who finds filings dense and doesn't know what to look at. For them a confident wrong sentence is worse than a missing one, because they can't spot it. That set the quality bar for everything else.</p>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="good">
+      <span class="label">02 · What good looks like</span>
+      <h2 id="good">Accurate before complete, and always checkable</h2>
+      <ul>
+        <li><strong>Every fact cites its page,</strong> and one click shows the source.</li>
+        <li><strong>Facts and interpretation are separate:</strong> "What the filing says", then "What this might mean", labelled as a reading.</li>
+        <li><strong>Short, but complete for the question asked,</strong> then three follow-up questions worth asking next.</li>
+        <li><strong>No buy, sell or hold advice,</strong> and off-topic questions get a one-line note on what IndexIt covers.</li>
+      </ul>
+      <p><strong>Constraints:</strong> a laptop with 8 GB of memory, my personal Claude subscription instead of a paid API budget, and a single user: me.</p>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="built">
+      <span class="label">03 · What I built</span>
+      <h2 id="built">Ask, check the source, grow the library</h2>
+      <p>Claude researches each question as an agent: it decides what to search for, often several times, through an MCP server that exposes only IndexIt's own tools. Search is company-aware and latest-filing-first. Every result page arrives with its structured tables, so numbers stay tied to their column headers.</p>
+    </section>
+
+    <div class="wrap-wide">
+      <figure>
+        <img src="/assets/img/indexit-citation.jpg" alt="Clicking a citation opens a side panel with the source page's structured table: Amazon's segment results for 2023 to 2025." width="1800" height="1175" loading="lazy">
+        <figcaption>Click any citation and the page's tables open beside the answer, so a reader can check the numbers themselves.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/img/indexit-add.jpg" alt="The Add filings dialog: upload one or more PDFs, or fetch a 10-K from the SEC by company and fiscal year." width="1800" height="1175" loading="lazy">
+        <figcaption>Add filings by uploading PDFs or by company and year from the SEC. Each is checked against its cover page before it joins the library, and it's searchable in under a minute.</figcaption>
+      </figure>
+    </div>
+
+    <section class="wrap prose" aria-labelledby="decisions">
+      <span class="label">04 · Key decisions</span>
+      <h2 id="decisions">Six decisions, and why</h2>
+      <ol class="decisions">
+        <li>
+          <h3>An agent, not a single search</h3>
+          <p class="why"><b>Why</b>Real questions span years and companies ("Is NVIDIA's growth sustainable, and is AMD's?"). One retrieval step can't plan that; an agent searches as many times as the question needs.</p>
+          <p class="tradeoff"><b>Trade-off</b>Slower and less predictable than one search, so I measured latency before committing.</p>
+        </li>
+        <li>
+          <h3>Claude Code and MCP on my subscription, instead of the API</h3>
+          <p class="why"><b>Why</b>No per-question bill while learning, and the same agent works in the app and in evals.</p>
+          <p class="tradeoff"><b>Trade-off</b>Personal use only. A version for other people would move to the API with its own keys.</p>
+        </li>
+        <li>
+          <h3>Guardrails enforced by configuration, not the prompt</h3>
+          <p class="why"><b>Why</b>The first run showed the agent could see my other connected apps. Instructions alone shouldn't be the safety net, so the agent now has no built-in tools, only IndexIt's, and the session aborts if anything else appears.</p>
+          <p class="tradeoff"><b>Bonus</b>Hiding the extra tool definitions also cut the cost of a simple question about tenfold.</p>
+        </li>
+        <li>
+          <h3>Choose the model with evals</h3>
+          <p class="why"><b>Why</b>I expected the larger model to win. On 27 fact-checked questions, Sonnet 5.5 gave 23 fully correct answers to Opus 5.5's 18, with 2 serious errors to Opus's 5, and was faster and cheaper. Giving Opus more effort made it worse: longer answers with more outside facts.</p>
+          <p class="tradeoff"><b>Trade-off</b>Opus covered slightly more of each answer key. For readers who can't spot mistakes, I chose accuracy over coverage.</p>
+        </li>
+        <li>
+          <h3>Tables: improve what Claude reads, not what search finds</h3>
+          <p class="why"><b>Why</b>Adding every table as a searchable passage didn't improve search at all. The pages were already being found through their text. The win was attaching each result page's structured tables to what Claude reads, which also fixed a habit the evals exposed: the agent almost never opened full pages.</p>
+        </li>
+        <li>
+          <h3>An answer format built for trust</h3>
+          <p class="why"><b>Why</b>Separating facts from interpretation, citing every fact, and making the source one click away turns "trust me" into "check me". Follow-up questions guide readers who don't know what to ask next.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="quality">
+      <span class="label">05 · How I measured quality</span>
+      <h2 id="quality">An eval set I couldn't fool myself with</h2>
+      <p>I built an eval set of 56 questions across 7 companies, phrased the way a curious reader would ask them, with answer keys checked against the filings. They're split into a <strong>dev</strong> set for tuning and a held-out <strong>test</strong> set, so improvements can't just be overfitting. A separate fact-checking agent verifies every claim in every answer against the filings, and each flag was reviewed and sorted by severity.</p>
+
+      <h3>Choosing the model (27 dev questions)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Model</th><th>Fully correct</th><th>Serious errors</th><th>Median time</th><th>Cost per answer</th></tr></thead>
+          <tbody>
+            <tr class="best"><td>Sonnet 5.5, high effort</td><td class="n">23 / 27</td><td class="n">2</td><td class="n">14 s</td><td class="n">$0.05</td></tr>
+            <tr><td>Opus 5.5, medium effort</td><td class="n">18 / 27</td><td class="n">5</td><td class="n">18 s</td><td class="n">$0.12</td></tr>
+            <tr><td>Opus 5.5, high effort</td><td class="n">16 / 27</td><td class="n">5</td><td class="n">19 s</td><td class="n">$0.13</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Cost is the API list-price equivalent; on a subscription it's how much of the plan each answer uses.</p>
+
+      <h3>After targeted fixes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Dev, run 1</th><th>Dev, run 2</th><th>Test (held out)</th></tr></thead>
+          <tbody>
+            <tr><td>Fully correct</td><td class="n">25 / 27</td><td class="n">24 / 27</td><td class="n">15 / 19</td></tr>
+            <tr><td>Wrong facts or numbers</td><td class="n">0</td><td class="n">1</td><td class="n">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The fixes targeted the error types the evals surfaced: outside facts in interpretations, follow-up questions built on false premises, and loose summaries such as "nearly doubled" for 1.75×.</p>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="didnt">
+      <span class="label">06 · What didn't work</span>
+      <h2 id="didnt">Ideas the numbers talked me out of</h2>
+      <ul>
+        <li><strong>Smarter search tricks</strong> (a reranker, keyword-plus-meaning search, tables as search passages) looked promising and moved the search score little or not at all. I kept search simple.</li>
+        <li><strong>More effort for the bigger model</strong> made answers longer and less accurate.</li>
+        <li><strong>Prompt rules have limits.</strong> Wording rules removed the errors they targeted, and new ones appeared elsewhere. About 1 answer in 10 still overstates a summary line, even when its cited facts are right.</li>
+      </ul>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="learned">
+      <span class="label">07 · What I learned</span>
+      <h2 id="learned">Lessons I'll carry into every AI product</h2>
+      <ul>
+        <li><strong>Evals change decisions.</strong> Without them I'd have shipped the bigger, slower, less accurate model.</li>
+        <li><strong>Know your user's failure mode.</strong> For non-experts, the dangerous error is the confident summary, not the missing detail.</li>
+        <li><strong>Put guardrails in configuration.</strong> Prompts guide behaviour; configuration limits it.</li>
+        <li><strong>Showing sources is a product decision.</strong> One click to the source page does more for trust than any wording.</li>
+      </ul>
+    </section>
+
+    <section class="wrap prose" aria-labelledby="next">
+      <span class="label">08 · What's next</span>
+      <h2 id="next">Closing the last gaps</h2>
+      <ul>
+        <li><strong>A verification pass:</strong> check each draft answer against its sources before showing it, to catch the remaining overstatements.</li>
+        <li><strong>Multimodal RAG:</strong> reading charts in investor presentations, where the numbers exist only as images.</li>
+      </ul>
+      <p class="project-links" style="margin-top:2rem">
+        <a href="https://github.com/riyasubhedar/indexit">Code on GitHub ↗</a>
+        <a href="https://github.com/riyasubhedar/indexit/blob/main/PROJECT.md">Full decision log ↗</a>
+        <a href="/#work">← All work</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <span>© 2026 Riya Subhedar</span>
+    <span>Built with Claude Code</span>
+  </footer>
+</body>
+</html>
