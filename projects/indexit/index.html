@@ -109,8 +109,9 @@
 
     <section class="wrap prose" aria-labelledby="built">
       <span class="label">03 · What I built</span>
-      <h2 id="built">Ask, check the source, grow the library</h2>
+      <h2 id="built">Ask, compare, check the source, grow the library</h2>
       <p>Claude researches each question as an agent: it decides what to search for, often several times, through an MCP server that exposes only IndexIt's own tools. Search is company-aware and latest-filing-first. Every result page arrives with its structured tables, so numbers stay tied to their column headers.</p>
+      <p><strong>Compare</strong> ranks every company in the library on one figure, or puts two side by side, with the source page beside each number. The figures come from a key-figures table that code reads from each filing's income statement and balance sheet, so browsing it costs nothing and nothing in it is generated. The observations under each comparison are written by rules from the same table, and each one can hand off to the agent: "Ask IndexIt why".</p>
     </section>
 
     <div class="wrap-wide">
@@ -121,6 +122,17 @@
       <figure>
         <img src="/assets/img/indexit-add.jpg" alt="The Add filings dialog: upload one or more PDFs, or fetch a 10-K from the SEC by company and fiscal year." width="1800" height="1175" loading="lazy">
         <figcaption>Add filings by uploading PDFs or by company and year from the SEC. Each is checked against its cover page before it joins the library, and it's searchable in under a minute.</figcaption>
+      </figure>
+      <figure>
+        <picture>
+          <source srcset="/assets/img/indexit-compare.jpg" media="(prefers-reduced-motion: reduce)">
+          <img src="/assets/img/indexit-compare-demo.webp" alt="A short loop of the Compare view: companies ranked by net margin, R&amp;D spending and revenue growth, each with its period and source page; then NVIDIA and AMD, and Walmart and Amazon, side by side on every figure." width="1800" height="1175" loading="lazy">
+        </picture>
+        <figcaption>Compare: rank every company on a figure, or put two side by side. Every number links to its page, and fiscal years that end on different dates are called out.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/img/indexit-side-by-side.jpg" alt="NVIDIA and AMD side by side: revenue, growth, margins and R&amp;D, each value with its source page and the difference between them, such as 6.2 times the revenue and a 43.1-point gap in net margin." width="1800" height="1175" loading="lazy">
+        <figcaption>Side by side, NVIDIA and AMD: NVIDIA's revenue is 6.2 times AMD's, yet AMD spends a larger share of its revenue on R&amp;D (23.4% vs 8.6%).</figcaption>
       </figure>
     </div>
 
@@ -135,7 +147,7 @@
         <div class="diagram-scroll">
           <svg viewBox="0 0 960 580" role="img" aria-labelledby="design-title design-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="design-title">IndexIt system design</title>
-            <desc id="design-desc">Indexing: a filing is added by upload or SEC fetch, its cover is checked, its text is cleaned into passages and embedded locally, and Docling extracts its tables. These are stored on the laptop as a library, a table cache and a LanceDB vector index. Answering: the user asks in the web app; a Claude agent inside guardrails searches through the IndexIt MCP server, which reads the stores and returns passages with their page tables; the cited answer streams back. Quality: golden questions are answered by the same agent, checked claim by claim by a fact-checker agent, and summarised in a scorecard that decides what ships.</desc>
+            <desc id="design-desc">Indexing: a filing is added by upload or SEC fetch, its cover is checked, its text is cleaned into passages and embedded locally, and Docling extracts its tables. These are stored on the laptop as a library, a table cache, a LanceDB vector index and a key-figures table that rules read from each filing's statements. Answering: the user asks in the web app; a Claude agent inside guardrails searches and compares through the IndexIt MCP server, which reads the stores and returns passages with their page tables, or ranked key figures; the cited answer streams back. Quality: golden questions are answered by the same agent, checked claim by claim by a fact-checker agent, and summarised in a scorecard that decides what ships.</desc>
             <style>
               .d-lane { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; fill: var(--muted); }
               .d-sep { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
@@ -207,6 +219,12 @@
             <text class="d-title" x="735" y="236" text-anchor="middle">Vector index</text>
             <text class="d-sub" x="735" y="255" text-anchor="middle">LanceDB</text>
 
+            <rect class="d-store" x="830" y="212" width="110" height="56" rx="4"/>
+            <text class="d-title" x="885" y="236" text-anchor="middle">Key figures</text>
+            <text class="d-sub" x="885" y="255" text-anchor="middle">per company, year</text>
+            <path class="d-arrow" d="M620,130 H885 V210" marker-end="url(#arrowhead)"/>
+            <text class="d-edge" x="830" y="123" text-anchor="middle">rules · SEC-checked</text>
+
             <!-- Answering -->
             <rect class="d-box" x="20" y="350" width="140" height="70" rx="4"/>
             <text class="d-title" x="90" y="377" text-anchor="middle">You</text>
@@ -222,8 +240,8 @@
 
             <rect class="d-box" x="550" y="350" width="190" height="70" rx="4"/>
             <text class="d-title" x="645" y="377" text-anchor="middle">IndexIt MCP server</text>
-            <text class="d-sub" x="645" y="395" text-anchor="middle">search_filings · read_page</text>
-            <text class="d-sub" x="645" y="410" text-anchor="middle">passages + page tables</text>
+            <text class="d-sub" x="645" y="395" text-anchor="middle">search · compare · read page</text>
+            <text class="d-sub" x="645" y="410" text-anchor="middle">passages, tables, figures</text>
 
             <path class="d-arrow" d="M160,374 H262" marker-end="url(#arrowhead)"/>
             <text class="d-edge" x="211" y="367" text-anchor="middle">question</text>
@@ -237,11 +255,12 @@
             <path class="d-arrow" d="M592,350 V270" marker-end="url(#arrowhead)"/>
             <path class="d-arrow" d="M705,350 V270" marker-end="url(#arrowhead)"/>
             <path class="d-arrow" d="M566,350 V312 H330 V270" marker-end="url(#arrowhead)"/>
+            <path class="d-arrow" d="M740,385 H885 V270" marker-end="url(#arrowhead)"/>
 
             <!-- Quality -->
             <rect class="d-box" x="20" y="504" width="190" height="60" rx="4"/>
             <text class="d-title" x="115" y="529" text-anchor="middle">Golden questions</text>
-            <text class="d-sub" x="115" y="548" text-anchor="middle">56 · dev and test sets</text>
+            <text class="d-sub" x="115" y="548" text-anchor="middle">59 · dev and test sets</text>
 
             <rect class="d-box" x="250" y="504" width="190" height="60" rx="4"/>
             <text class="d-title" x="345" y="529" text-anchor="middle">Same agent answers</text>
@@ -270,9 +289,10 @@
             <tr><td>Interface</td><td>A local web app, one page</td><td>A personal tool needs no hosting. Answers stream as they're written, and one Claude session stays open between questions, so follow-ups are fast.</td><td>Streamlit</td></tr>
             <tr><td>Model</td><td>Claude Sonnet 5.5</td><td>Won the model eval: 23 of 27 answers fully correct against Opus 5.5's 18, and faster and cheaper.</td><td>Opus 5.5</td></tr>
             <tr><td>Runtime</td><td>Claude Code on my subscription</td><td>No per-question bill while learning, and the same agent runs in the app and in the evals.</td><td>The Claude API</td></tr>
-            <tr><td>Boundary</td><td>An MCP server with two tools</td><td>The agent can reach the filings only through these tools, which keeps retrieval separate from reasoning and works with any MCP client.</td><td>Giving the agent file access</td></tr>
+            <tr><td>Boundary</td><td>An MCP server with three tools</td><td>The agent can reach the filings only through these tools, which keeps retrieval separate from reasoning and works with any MCP client.</td><td>Giving the agent file access</td></tr>
             <tr><td>Guardrails</td><td>Enforced by configuration</td><td>No built-in tools, IndexIt's tools only, and the session aborts if anything else appears. Prompts guide behaviour; configuration limits it.</td><td>Prompt instructions alone</td></tr>
             <tr><td>Search</td><td>Company-aware, latest filing first</td><td>A question searches only the companies it names, so pages that merely mention a company can't crowd out its own filing. The expected page was found for 14 of 25 dev questions, up from 11 without it.</td><td>One search across everything</td></tr>
+            <tr><td>Comparisons</td><td>A key-figures table read by rules, and one compare tool</td><td>Ranking companies by search meant one search per company: 7 searches and 25 s at 7 companies, about 100 at 100. One lookup took 14 s, and 251 of 254 figures match the SEC's own data exactly.</td><td>One search per company</td></tr>
             <tr><td>Tables</td><td>Small-to-big: find pages by text, attach their tables</td><td>Adding tables as search passages didn't change search at all. Attaching each result page's tables gives Claude numbers tied to their column headers.</td><td>Tables as search passages</td></tr>
             <tr><td>Parsing</td><td>PyMuPDF for text, Docling for tables</td><td>In a parsing test, plain extraction garbled an income statement; Docling reproduced it exactly, headers included.</td><td>Text extraction only</td></tr>
             <tr><td>Index</td><td>bge-small embeddings and LanceDB, both local</td><td>Free, private and light enough for an 8 GB laptop; LanceDB filters to the right filings before ranking, which company-aware search needs.</td><td>A hosted vector database</td></tr>
@@ -362,13 +382,22 @@
           <p class="shift-to"><span class="shift-k">So I chose</span>Text and tables only. No multimodal layer.</p>
           <p class="shift-note"><b>Trade-off</b>Charts aren't read as pictures. That's the right tool for chart-heavy documents like investor presentations, not for 10-Ks.</p>
         </li>
+        <li class="shift">
+          <p class="shift-topic">Comparisons</p>
+          <p class="shift-from"><span class="shift-k">I assumed</span>The agent can answer any question by searching, one company at a time.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-evidence"><span class="shift-k">What I found</span>"Which company made the most profit?" took <strong>7 searches and 25 s</strong> at 7 companies. At 100 companies it would take about 100 searches.</p>
+          <span class="shift-arrow" aria-hidden="true">→</span>
+          <p class="shift-to"><span class="shift-k">So I chose</span>A key-figures table read from each statement by rules, and one lookup that ranks every company. Now <strong>2 lookups, 14 s</strong>.</p>
+          <p class="shift-note"><b>Trade-off</b>Rules only recognise standard line names. Anything else is left out and the agent falls back to search, so a figure is missing rather than guessed.</p>
+        </li>
       </ol>
     </div>
 
     <section class="wrap prose" aria-labelledby="quality">
       <span class="label">06 · How I measured quality</span>
       <h2 id="quality">An eval set I couldn't fool myself with</h2>
-      <p>I built an eval set of 56 questions across 7 companies, phrased the way a curious reader would ask them, with answer keys checked against the filings. They're split into a <strong>dev</strong> set for tuning and a held-out <strong>test</strong> set, so improvements can't just be overfitting. A separate fact-checking agent verifies every claim in every answer against the filings, and each flag was reviewed and sorted by severity.</p>
+      <p>I built an eval set of 56 questions across 7 companies (59 across 10 once the library grew), phrased the way a curious reader would ask them, with answer keys checked against the filings. They're split into a <strong>dev</strong> set for tuning and a held-out <strong>test</strong> set, so improvements can't just be overfitting. A separate fact-checking agent verifies every claim in every answer against the filings, and each flag was reviewed and sorted by severity.</p>
 
       <h3>Choosing the model (27 dev questions)</h3>
       <div class="table-wrap">
@@ -394,6 +423,9 @@
         </table>
       </div>
       <p>The fixes targeted the error types the evals surfaced: outside facts in interpretations, follow-up questions built on false premises, and loose summaries such as "nearly doubled" for 1.75×.</p>
+
+      <h3>Checking the key figures</h3>
+      <p>Before any answer used them, I compared every figure the rules extracted with the SEC's own structured data for the same periods: <strong>251 of 254 match exactly, and none differ</strong>. The other 3 have no comparable tag and were checked by hand. On 9 cross-company questions, answers were fully correct on 8, with a median of 10 s. The one flag came from my tool, not the model: it showed growth inputs without units, so the answer said the units were unclear. I fixed the tool.</p>
     </section>
 
     <section class="wrap prose" aria-labelledby="didnt">
@@ -424,7 +456,7 @@
       <p>IndexIt does what I set out to build, so I've stopped here. If I picked it up again, I'd start with these:</p>
       <ul>
         <li><strong>A verification pass:</strong> a separate check of each draft against its sources before it's shown, aimed at the remaining overstated summaries, if evals showed the gain was worth the extra 10 seconds.</li>
-        <li><strong>A key-figures table for big comparisons:</strong> questions like "who spends the most on R&amp;D?" search every company one by one today. A table of headline figures, built from the filings' own statements, would keep them fast as the library grows.</li>
+        <li><strong>Graphics-heavy reports, with multimodal:</strong> investor presentations, earnings decks and sustainability reports often carry their data in charts and infographics that never appear as text. That's where reading pages as images earns its place. I'd first measure how much of their data lives only in images, then add the layer and judge it on the same evals.</li>
       </ul>
       <p class="project-links" style="margin-top:2rem">
         <a href="https://github.com/riyasubhedar/indexit" data-goatcounter-click="out-indexit-code">Code on GitHub ↗</a>
